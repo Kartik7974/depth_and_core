@@ -6,8 +6,13 @@ set -o errexit
 bundle install
 
 # Clean up any previous builds
-rm -rf public/assets
-rm -rf tmp/cache/assets
+rm -rf public/assets public/packs
+rm -rf tmp/cache/webpacker
+rm -rf node_modules
+yarn cache clean
+
+# Install node modules
+yarn install --check-files
 
 # Database setup
 bundle exec rake db:migrate 2>/dev/null || bundle exec rake db:setup

@@ -8,6 +8,7 @@ services:
   - type: web
     name: depth_and_core-2
     env: ruby
+    plan: free
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
@@ -18,7 +19,7 @@ services:
       - key: RAILS_MASTER_KEY
         sync: false
       - key: NODE_VERSION
-        value: 20.9.0
+        value: 18.19.0
       - key: RAILS_ENV
         value: production
       - key: RACK_ENV
