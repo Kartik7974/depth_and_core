@@ -7,3 +7,14 @@ services:
     envVars:
       - key: RAILS_MASTER_KEY
         sync: false 
+
+
+
+     
+
+
+# mac@Macs-MacBook-Pro depth_and_core-main % git initgit add README.md
+# git commit -m "first commit"
+# git branch -M main     
+# git remote add origin https://github.com/Kartik7974/depth_and_core.git
+# git push -u origin main
