@@ -1,12 +1,25 @@
+databases:
+  - name: depth_and_core_db
+    databaseName: depth_and_core_production
+    user: depth_and_core
+    plan: free
+
 services:
   - type: web
-    name: your-app-name
+    name: depth_and_core
     env: ruby
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: depth_and_core_db
+          property: connectionString
       - key: RAILS_MASTER_KEY
-        sync: false 
+        sync: false
+      - key: NODE_VERSION
+        value: 16.20.0
+    plan: free
 
 
 

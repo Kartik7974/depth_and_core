@@ -3,9 +3,6 @@
 set -o errexit
 
 bundle install
-yarn install
-bundle exec echo yes | bundle exec npm install -D webpack-cli
-# bundle exec rails webpacker:install
 bundle exec rake assets:precompile
-bundle exec rake assets:cleanbundle exec rake db:migrate
-bundle exec rails db:seed RAILS_ENV=production
+bundle exec rake assets:clean
+bundle exec rake db:migrate
