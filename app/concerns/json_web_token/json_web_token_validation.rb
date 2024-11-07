@@ -2,31 +2,20 @@
 
 module JsonWebToken
   module JsonWebTokenValidation
-    ERROR_CLASSES = [
-      JWT::DecodeError,
-      JWT::ExpiredSignature,
-    ].freeze
+    extend ActiveSupport::Concern
 
-    private
+    ALGORITHM = 'HS256'
 
-    def validate_json_web_token
-      token = request.headers[:token] || params[:token]
-      begin
-        @token = JsonWebTokenService.decode(token)
-      rescue *ERROR_CLASSES => exception
-        handle_exception exception
-      end
+    def jwt_encode(payload, exp = 24.hours.from_now)
+      payload[:exp] = exp.to_i
+      JWT.encode(payload, Rails.application.secrets.secret_key_base, ALGORITHM)
     end
 
-    def handle_exception(exception)
-      case exception
-      when JWT::ExpiredSignature
-        return render json: { errors: [token: 'Token has Expired'] },
-          status: :unauthorized
-      when JWT::DecodeError
-        return render json: { errors: [token: 'Invalid token'] },
-          status: :bad_request
-      end
+    def jwt_decode(token)
+      decoded = JWT.decode(token, Rails.application.secrets.secret_key_base, true, { algorithm: ALGORITHM })[0]
+      HashWithIndifferentAccess.new(decoded)
+    rescue JWT::DecodeError => e
+      nil
     end
   end
 end
