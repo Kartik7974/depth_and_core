@@ -13,4 +13,4 @@ rm -rf tmp/cache/assets
 bundle exec rake db:migrate 2>/dev/null || bundle exec rake db:setup
 
 # Asset compilation
-bundle exec rake assets:precompile RAILS_ENV=production
+RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rake assets:precompile
