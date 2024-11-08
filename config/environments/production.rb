@@ -120,4 +120,12 @@ Rails.application.configure do
 
   config.serve_static_assets = true
   config.assets.digest = true
+
+  # Enable more detailed logging
+  config.log_level = :debug
+
+  # Log to STDOUT for Render
+  logger           = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter = config.log_formatter
+  config.logger    = ActiveSupport::TaggedLogging.new(logger)
 end
