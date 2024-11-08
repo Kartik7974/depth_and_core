@@ -4,14 +4,22 @@ class AccountsController < ApplicationController
 	def create
 		@account = Account.new(account_params)
 		if @account.save
-			render json: { message: "account created successfully", account: @account }, status: :created
+			render json: {
+				status: 'success',
+				message: 'Account created successfully',
+				data: { email: @account.email }
+			}, status: :created
 	    else
-	      render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
+	      render json: {
+	        status: 'error',
+	        message: 'Account creation failed',
+	        errors: @account.errors.full_messages
+	      }, status: :unprocessable_entity
 	    end
     end
 
 	private
 	def account_params
-	    params.require(:account).permit(:email, :password, :full_name)
+	    params.require(:account).permit(:email, :password)
 	end
 end

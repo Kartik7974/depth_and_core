@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  root to: 'home#index'
+  root 'health#check'
   
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  post 'signup', to: 'accounts#create'
-  post 'login', to: 'logins#login'
+  post '/signup', to: 'accounts#create'
+  post '/login', to: 'logins#login'
   get '/healthz', to: 'health#check'
 end
