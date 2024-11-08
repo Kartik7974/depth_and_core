@@ -3,6 +3,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.2.0'
 
+# Add this to specify Bundler version
+gem 'bundler', '~> 2.4.8'
+
 # Rails itself
 gem 'rails', '~> 6.1.0'
 
