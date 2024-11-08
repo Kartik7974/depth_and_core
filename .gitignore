@@ -38,3 +38,7 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Remove or comment out these lines if they exist
+# bin/webpack
+# bin/webpack-dev-server
