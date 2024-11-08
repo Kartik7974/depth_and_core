@@ -9,7 +9,7 @@ services:
     name: depth_and_core-2
     env: ruby
     plan: free
-    buildCommand: gem install bundler:2.4.8 && bundle install && bundle exec rake assets:precompile
+    buildCommand: bundle install && bundle exec rake assets:precompile && bundle exec rake webpacker:compile
     startCommand: bundle exec puma -C config/puma.rb
     envVars:
       - key: DATABASE_URL
