@@ -3,4 +3,4 @@ Rails.application.routes.draw do
   post 'signup', to: 'accounts#create'
   post 'login', to: 'logins#login'
   get '/healthz', to: 'health#check'
-end
+e
