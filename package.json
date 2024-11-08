@@ -2,7 +2,7 @@
   "name": "depth-and-core",
   "private": true,
   "engines": {
-    "node": "16.x"
+    "node": "16.20.0"
   },
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
