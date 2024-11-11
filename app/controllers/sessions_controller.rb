@@ -1,25 +1,33 @@
 class SessionsController < ApplicationController
+  skip_before_action :verify_authenticity_token  # For API requests
+
   def new
-    # Render the login form
-    @user = User.new
+    respond_to do |format|
+      format.html
+      format.json { render json: { message: "Login form" } }
+    end
   end
 
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
-      # Log the user in and redirect to their profile
-      session[:user_id] = user.id
-      redirect_to root_path, notice: 'Successfully logged in!'
-    else
-      # Create an error message
-      flash.now[:alert] = 'Invalid email/password combination'
-      render :new
+    user = User.find_by(email: params[:email])
+    
+    respond_to do |format|
+      if user&.authenticate(params[:password])
+        session[:user_id] = user.id
+        format.html { redirect_to root_path, notice: 'Logged in successfully!' }
+        format.json { render json: { status: 'success', user: user }, status: :ok }
+      else
+        format.html { render :new }
+        format.json { render json: { status: 'error', message: 'Invalid credentials' }, status: :unauthorized }
+      end
     end
   end
 
   def destroy
-    # Log out the user
     session[:user_id] = nil
-    redirect_to root_path, notice: 'Successfully logged out!'
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: 'Logged out successfully!' }
+      format.json { render json: { status: 'success', message: 'Logged out successfully' } }
+    end
   end
 end
