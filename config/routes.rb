@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
-  # Health check routes - KEEP THESE!
+  # Health check routes - Keep these at the top
   get '/healthz', to: 'health#check'
   get '/', to: 'health#check'
 
-  # Authentication routes - Add these below the health routes
+  # Authentication routes
+  resources :users, only: [:new, :create]
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'
+  
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
