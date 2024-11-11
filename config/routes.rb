@@ -1,13 +1,14 @@
 Rails.application.routes.draw do
-  # Health check routes
-  get '/healthz', to: 'health#check'
-  get '/', to: 'health#check'
-
-  # Authentication routes
-  get '/signup', to: 'users#new'
-  post '/signup', to: 'users#create'
+  root 'home#index'
   
+  # User routes
+  resources :users, only: [:new, :create]
+  
+  # Session routes
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
+  
+  # Account routes (if needed)
+  resources :accounts, only: [:create]
 end

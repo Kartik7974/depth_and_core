@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token  # For API requests
 
   def new
     respond_to do |format|
@@ -9,11 +10,18 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:user][:email])
+    user_params = params[:user] || params.dig(:session, :user)
+    email = user_params[:email].downcase if user_params
+    password = user_params[:password] if user_params
     
+    if user&.authenticate(params[:password])
+      user = User.find_by(email: email)
+          format.html { redirect_to root_path, notice: 'Logged in successfully!' }
+        format.json { render json: { status: 'success', user: user }, status: :ok }
     respond_to do |format|
-      if user&.authenticate(params[:user][:password])
+      if user&.authenticate(password)
         session[:user_id] = user.id
+        token = JsonWebToken::JsonWebTokenService.encode(user.id)
         format.html { redirect_to root_path, notice: 'Logged in successfully!' }
         format.json { 
           render json: {
@@ -22,7 +30,8 @@ class SessionsController < ApplicationController
             user: {
               id: user.id,
               email: user.email
-            }
+            },
+            token: token
           }, status: :ok 
         }
       else
@@ -30,7 +39,7 @@ class SessionsController < ApplicationController
         format.json { 
           render json: {
             status: 'error',
-            message: 'Invalid credentials'
+            message: 'Invalid credentials',
           }, status: :unauthorized 
         }
       end
